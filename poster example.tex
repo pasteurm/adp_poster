@@ -40,6 +40,7 @@
 %\usepackage{bbold}
 \usepackage{hhline,url}
 \usepackage{booktabs}
+\usepackage[ruled,vlined]{algorithm2e}      
 %\usepackage{epic,eepic}
 %\usepackage{pstricks,pst-grad}
 \graphicspath{{./}{./img/}}
@@ -97,7 +98,7 @@
 \newtheorem{Cor}{Corollary}
 \newtheorem{Ass}{Assumption}
 \newtheorem{Prop}{Proposition}
-\newtheorem{algorithm}{Algorithm}%[section]
+\newtheorem{algorithm1}{Algorithm}%[section]
 {\theorembodyfont{\rmfamily}
 \newtheorem{Rem}{Remark}}
 \newtheorem{Obs}{Fact}
@@ -290,26 +291,19 @@ is known as the Fisher information matrix.
 	& s.t.\  \varepsilon = d_{KL}(p_\theta(\tau) \ ||\ p_{\theta+\Delta\theta} (\tau) \approx \frac{1}{2} \Delta \theta^T F_\theta \Delta \theta)   \nonumber
 \end{eqnarray}
 
-and has the solution
+and has the solution:
 \begin{equation}
 	\Delta \theta = \alpha_n F_\theta^{-1}\nabla_\theta J
 \end{equation}
-	\item The direction $\Delta \theta$ is called the natural gradient.
+the natural gradient:
+\begin{equation}
+	\widetilde \nabla_\theta J(\theta) = \Delta \theta / \alpha_n
+\end{equation}
+	\item The natural gradient can be simply computed as $\widetilde \nabla_\theta J(\theta) = G_\theta^{-1}F_\theta \omega = omega$ using the function approximation concept. Therefore the resulting policy improvement step becomes $\theta_{i+1} = \theta_i + \alpha\omega$.
 \end{itemize}
 \vspace*{2mm}
 }
 
-\subsection{Compatible Function Approximation}
-\vspace*{-17mm}
-{\large
-\begin{itemize}
-	\item to be added \vspace{-2mm}
-
-	\item to be added \vspace{-2mm}
-
-	
-\end{itemize}
-}
 
 \end{pcolumn}
 %
@@ -318,7 +312,7 @@ and has the solution
 \begin{pcolumn}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Natural Actor-Critic Algorithm}
+\subsection{Episodic Natural Actor-Critic Algorithm}
 \vspace*{-16mm}
 %
 {\large
@@ -342,27 +336,40 @@ with
 	& R_i = \sum_{t=0}^{H}a_t r(x_t, u_t)
 \end{eqnarray}
 
-	\item In order to take time-variance rewards significantly better into account, \vspace{-2mm}
-
-	\item to be added...
+	\item In order to take time-variance rewards significantly better into account, we use a time-variant average rewards $\overline r = [\overline r_1, \overline r_2, ..., \overline r_K$ and then we have to solve:  \vspace{-2mm}
+\begin{equation}
+\left[
+	\begin{matrix}
+		g_{eNACn} \\
+		\overline r
+	\end{matrix}
+	\right] = 
+\left[
+	\begin{matrix}
+		F_2 & \overline \Phi \\
+		\overline \Phi^T & mI_H
+	\end{matrix}
+	\right]
+\left[
+	\begin{matrix}
+		g \\
+		\overline r
+	\end{matrix}
+	\right]
+\end{equation}
+and finally obtained:
+\begin{equation}
+	b = Q^{-1}(\overline r - \overline \Phi^T F_2^{-1}g)
+\end{equation}
+with $Q^{-1} = m^{-1}(I_n + \overline\Phi^T(mF_2-\overline\Phi\overline\Phi^T)^{-1}\overline\Phi)$ and $\Phi$ is the eligibility matrix. 
+	\item The complete solution can be transformed into the form below:
 \end{itemize}
-
-\vspace*{-2mm}
-}
-
-
-\section{A Block-Jacobi NsJD Algorithm}
-%
-\vspace*{-18mm}
-
-\subsection{Numerical Experiments}
-%
-
-%
 \begin{center}
-	\includegraphics[width=0.9\textwidth]{exp01d.pdf}
+	\includegraphics[width=0.9\textwidth]{img/algorithm.png}
 	\vspace*{-13mm}
 \end{center}
+\vspace*{-2mm}
+}
 
 \end{pcolumn}
 }
