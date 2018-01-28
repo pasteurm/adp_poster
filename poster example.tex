@@ -160,7 +160,8 @@ Proof (Sketch).}\,\,}{\hfill\linebreak[0]\hspace*{\fill}}
 \begin{equation}
 	J(\theta) = \frac{1}{a_\Sigma} E \{\sum_{k=0}^H a_k r_k\}
 \end{equation}
-is optimized where $a_k$ denote time-step dependent weighting factors and $r_k$ the reward the learning system received by each instant of time.
+is maximized. $a_k$ denote the time-step dependent weighting factors.
+% optimized where $a_k$ denote time-step dependent weighting factors and $r_k$ the reward the learning system received by each instant of time.
 \end{itemize}
 \vspace*{2mm}
 }
@@ -172,109 +173,82 @@ is optimized where $a_k$ denote time-step dependent weighting factors and $r_k$ 
 \begin{itemize}
 	\item The policy parameter $\theta$ is updated at each time step by:
 \begin{equation}
-	\theta_{m+1} = \theta_m + \alpha_m \nabla_\theta J |_{\theta = \theta_m}
+	\theta_{m+1} = \theta_m + \alpha_m \nabla_\theta J(\theta)
 \end{equation}
-where $\alpha_m \in R^+$ denotes a learning rate and fulfill:
-\begin{equation}
-	\sum_{m=0}^\infty  \alpha_m > 0  \ \ and \  \ \sum_{m=0}^\infty \alpha_m^2 = 0
-\end{equation}
+where $\alpha_m \in R^+$ denotes a learning rate.
+ % and fulfill:
+% \begin{equation}
+% 	\sum_{m=0}^\infty  \alpha_m > 0  \ \ and \  \ \sum_{m=0}^\infty \alpha_m^2 = 0
+% \end{equation}
 		%
-	\item The main problem is obtaining a good estimator of the policy gradient $\nabla_\theta J |_\theta=\theta_m$.
+	\item The main problem is obtaining a good estimator of the gradient $\nabla_\theta J |_{\theta=\theta_m}$.
 \end{itemize}
 }
-\subsection{Motor Primitive Framework}
-\vspace*{-17mm}
-%
-{\large
-\begin{itemize}
-	\item We use motor commands to well represent a trajectory, which forms the stochastic policy:
-
-\begin{equation}
-	\pi(\ddot{\hat{q_d}} | q_d) = \frac{1}{\sqrt{2 \pi \sigma^2}} exp(-\frac{(\ddot{\hat{q_d}} - \ddot{q_d})^2}{2 \sigma^2})
-\end{equation}
-
-The $\ddot{\hat{q_d}}$ term denotes for a perturbed target output considering the exploration controlled only through $\sigma$.
-		%
-\end{itemize}
-}
-
 
 \subsection{Likelihood Ratio Method}
 \vspace*{-17mm}
 {\large
 %
 \begin{itemize}
-	\item Use $\tau$ to represent a real generated trajectory, $\tau \sim p_\theta(\tau) = p(\tau | \theta)$ , with rewards $r(\tau) = \sum_{k=0}^H a_k r_k$. 
-	
-	\item \begin{lemma}
-	save for use.....
-\end{lemma}
-
-	\item Then the expect return of a policy can be written as an expectation over all possible trajectories:
+	\item Use $\tau$ to represent a real generated trajectory, $\tau \sim p_\theta(\tau) = p(\tau | \theta)$ , with rewards $r(\tau) = \sum_{k=0}^H a_k r_k$. Then the expect return of a policy can be written as an expectation over all possible trajectories:
 
 \begin{equation}
 	J(\theta) = \int p_\theta(\tau) r(\tau) d\tau
 \end{equation}
 
-%  	\item Subsequently, the gradient can be rewritted by:
-
-% \begin{eqnarray}
-% 	& \nabla_\theta J(\theta) = \int \nabla_\theta p_\theta(\tau) r(\tau) d\tau \nonumber \\
-% 	& = \int p_\theta(\tau) \nabla_\theta log p_\theta (\tau) r(\tau) d(\tau) \nonumber \\
-% 	& = E \{ \nabla_\theta log p_\theta (\tau) r (\tau)\}
-% \end{eqnarray}
-
-% 	\item The derivative $\nabla_\theta log p_\theta (\tau)$ can be computed by:
-
-% \begin{equation}
-% 	\nabla_\theta log p_\theta (\tau) = \sum_{k=0}^H \nabla_\theta log \pi_\theta (u_k | x_k)
-% \end{equation}
-% 	\item A constant baseline can be inserted since it has no effect to the derivative, and results in the final form of the gradient estimator:
-% \begin{equation}
-% 	\nabla_\theta J(\theta) = E\{\nabla_\theta log p_\theta(\tau) (r(\tau) - b)\}
-% \end{equation}
-% Usually $b$ is chosen with the goal to minimize the variance of the gradient estimator.
-\end{itemize}
-\vspace*{2mm}
-}
-
-\end{pcolumn}
-%
-\hfill
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{pcolumn}
-{\large
-\begin{itemize}
-
  	\item Subsequently, the gradient can be rewritted by:
-
-\begin{eqnarray}
-	& \nabla_\theta J(\theta) = \int \nabla_\theta p_\theta(\tau) r(\tau) d\tau \nonumber \\
-	& = \int p_\theta(\tau) \nabla_\theta log p_\theta (\tau) r(\tau) d(\tau) \nonumber \\
-	& = E \{ \nabla_\theta log p_\theta (\tau) r (\tau)\}
-\end{eqnarray}
+\begin{equation}
+	\nabla_\theta J(\theta) = \int \nabla_\theta p_\theta(\tau) r(\tau) d\tau \nonumber \\
+	= \int p_\theta(\tau) \nabla_\theta log p_\theta (\tau) r(\tau) d(\tau) \nonumber \\
+	= E \{ \nabla_\theta log p_\theta (\tau) r (\tau)\}
+\end{equation}
 
 	\item The derivative $\nabla_\theta log p_\theta (\tau)$ can be computed by:
 
 \begin{equation}
 	\nabla_\theta log p_\theta (\tau) = \sum_{k=0}^H \nabla_\theta log \pi_\theta (u_k | x_k)
 \end{equation}
-	\item A constant baseline can be inserted since it has no effect to the derivative, and results in the final form of the gradient estimator:
+	\item A constant baseline can be inserted since it has no effect to the derivative. Usually $b$ is chosen with the goal to minimize the variance of the gradient estimator. and results in the final form of the gradient estimator:
+% \begin{equation}
+% 	\nabla_\theta J(\theta) = E\{\nabla_\theta log p_\theta(\tau) (r(\tau) - b)\}
+% \end{equation}
 \begin{equation}
-	\nabla_\theta J(\theta) = E\{\nabla_\theta log p_\theta(\tau) (r(\tau) - b)\}
+	\nabla_\theta J(\theta) = \left<\bigg(\sum_{k=0}^H \nabla_\theta log \pi_\theta (u_k | x_k)\bigg)\bigg(\sum_{l=0}^Ha_l r_l - b\bigg)\right>
 \end{equation}
-Usually $b$ is chosen with the goal to minimize the variance of the gradient estimator.
 
 \end{itemize}
 \vspace*{2mm}
 }
-\section{Natural Actor-Critic}
+
+
+\end{pcolumn}
+%
+\hfill
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{pcolumn}
+
+% \subsection{Motor Primitive Framework}
+% \vspace*{-17mm}
+% %
+% {\large
+% \begin{itemize}
+% 	\item We use motor commands to well represent a trajectory, which forms the stochastic policy:
+
+% \begin{equation}
+% 	\pi(\ddot{\hat{q_d}} | q_d) = \frac{1}{\sqrt{2 \pi \sigma^2}} exp(-\frac{(\ddot{\hat{q_d}} - \ddot{q_d})^2}{2 \sigma^2})
+% \end{equation}
+
+% The $\ddot{\hat{q_d}}$ term denotes for a perturbed target output considering the exploration controlled only through $\sigma$.
+% 		%
+% \end{itemize}
+% }
+
+\section{Natural Actor-Critic Algorithm}
 \vspace*{-20mm}
 %
 {\large
 \begin{itemize}
-	\item We first introduce second-order Taylor expansion to approximate the closeness of two distribution, i.e. the gradient descent with respect to an invariant measure of the closeness between the current policy and the updated policy based on the distribution of the paths generated by each of these: \vspace{-2mm}
-
+	\item We first introduce second-order Taylor expansion to approximate the closeness of two distribution, i.e. the amount of change of the policy: \vspace{-2mm}
 \begin{equation}
 	d_{KL} (p_\theta(\tau) \ || \ p_{\theta+\Delta_\theta}(\tau)) \approx \frac{1}{2} \Delta \theta^T F_\theta \Delta \theta
 \end{equation}
@@ -284,8 +258,16 @@ where
 \end{equation}
 is known as the Fisher information matrix.
 
-	\item Assume that the amount of change is fixed using step size $\varepsilon$. Then we have an Optimization problem:
+\end{itemize}
+\vspace*{2mm}
+}
 
+\subsection{Natural Gradient}
+\vspace*{-17mm}
+%
+{\large
+\begin{itemize}
+	\item Assume that the amount of change is fixed using step size $\varepsilon$. Then the optimization problem can be described as:
 \begin{eqnarray}
 	& \max \limits_{\Delta\theta} J(\theta + \Delta\theta) \approx J(\theta) + \Delta\theta^T \nabla_\theta J \\
 	& s.t.\  \varepsilon = d_{KL}(p_\theta(\tau) \ ||\ p_{\theta+\Delta\theta} (\tau) \approx \frac{1}{2} \Delta \theta^T F_\theta \Delta \theta)   \nonumber
@@ -295,16 +277,36 @@ and has the solution:
 \begin{equation}
 	\Delta \theta = \alpha_n F_\theta^{-1}\nabla_\theta J
 \end{equation}
-the natural gradient:
-\begin{equation}
-	\widetilde \nabla_\theta J(\theta) = \Delta \theta / \alpha_n
-\end{equation}
-	\item The natural gradient can be simply computed as $\widetilde \nabla_\theta J(\theta) = G_\theta^{-1}F_\theta \omega = omega$ using the function approximation concept. Therefore the resulting policy improvement step becomes $\theta_{i+1} = \theta_i + \alpha\omega$.
+with $\alpha_n = [\varepsilon(\nabla J(\theta)^TF_\theta^{-1}\nabla J(\theta))^{-1}]^{\frac{1}{2}}$. 
+	\item The item $\widetilde \nabla_\theta J(\theta) = \Delta \theta / \alpha_n$ is called the natural gradient and we will use it to replace the original gradient $\nabla_\theta J$ which represents the steepest ascend in order to obtain a faster convergence and stable update.
+
 \end{itemize}
 \vspace*{2mm}
 }
 
-
+\subsection{Compatible Function Approximation}
+\vspace*{-17mm}
+%
+{\large
+\begin{itemize}
+	\item Use a compatible function approximation parameterized by $\omega$ to repalce the critic term:
+\begin{equation}
+	(\nabla_\theta log \pi(u | x))^T \omega = Q^\pi(x, u) - b^\pi(x)
+\end{equation}
+	\item  Thus we derive an estimte of the policy gradient as:
+\begin{equation}
+	\nabla_\theta J(\theta) = \int_x d^\pi(x) \int_u \nabla_\theta \pi(u | x)\nabla_\theta log \pi(u|x)^T dudx\omega = \int_x d^\pi(x)\hat{G_\theta}(x)dx\omega = G_\theta \omega
+\end{equation}
+	\item The left-undecided Fisher information matrix in last section can be determined through sampling:
+\begin{eqnarray}
+	& F_\theta = -\left<\nabla_\theta^2 log p(\tau_{0:H})\right> = -\left<\sum_{k=0}^H \nabla_\theta^2 log \pi(u_H | x_H)\right>  \nonumber \\
+	& = - \int_x d_H^\pi (x) \int_u \pi(u|x) \nabla_\theta^2 log pi(u|x)dudx = G_\theta
+\end{eqnarray}
+	\item Thus the natural gradient can be simply computed as $\widetilde \nabla_\theta J(\theta) = F_\theta^{-1}G_\theta \omega = \omega$. Therefore the resulting policy improvement step becomes $\theta_{i+1} = \theta_i + \alpha\omega$.
+\end{itemize}
+\vspace*{2mm}
+}
+\subsection{Episodic Natural Actor-Critic Algorithm}
 \end{pcolumn}
 %
 \hfill
@@ -312,8 +314,8 @@ the natural gradient:
 \begin{pcolumn}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Episodic Natural Actor-Critic Algorithm}
-\vspace*{-16mm}
+
+\vspace*{-28mm}
 %
 {\large
 \begin{itemize}
