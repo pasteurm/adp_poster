@@ -325,7 +325,11 @@ with $\alpha_n = [\varepsilon(\nabla J(\theta)^TF_\theta^{-1}\nabla J(\theta))^{
 \begin{equation}
 	Q^\pi (x, u) = A^\pi(x, u) + V^\pi(x) = r(x,u) + \gamma \int_x p(x^{'}|x,u)V^\pi(x^{'})dx^{'}
 \end{equation}
-	\item Inserting $A^\pi(x,u)$ as the compatible value approximation term $\nabla_\theta log \pi(u_t|x_t)^T\omega$ and $V^\pi(x)$ an appropriate basis function representation $\phi(x)^Tv$. Then for episodic tasks we can derive:
+	\item Inserting $A^\pi(x,u)$ as the compatible value approximation term and $V^\pi(x)$ an appropriate basis function representation $\phi(x)^Tv$ we have:
+\begin{equation}
+	\nabla_\theta log \pi(u_t|x_t)^T\omega + \phi(x_t)^Tv = r(x_t, u_t) + \gamma\phi(x_{t+1}^T)v + \varepsilon(x_t, u_t, x_{t+1})
+\end{equation}
+	\item  For episodic tasks we can derive a simplified form:
 \begin{equation}
 	\sum_{t=0}^H a_t \nabla log \pi(u_t, x_t)^Tw + J_0 = \sum_{t=0}^H a_t r(x_t, u_t)
 \end{equation}
@@ -370,14 +374,23 @@ and finally obtained:
 	b = Q^{-1}(\overline r - \overline \Phi^T F_2^{-1}g)
 \end{equation}
 with $Q^{-1} = m^{-1}(I_n + \overline\Phi^T(mF_2-\overline\Phi\overline\Phi^T)^{-1}\overline\Phi)$ and $\Phi$ is the eligibility matrix. 
-	\item The complete solution can be transformed into the form below:
 \end{itemize}
-\begin{center}
-	\includegraphics[width=0.8\textwidth]{img/algorithm.png}
-	\vspace*{-13mm}
-\end{center}
 \vspace*{-2mm}
 }
+
+\section{Experiments \& Conclusion}
+\begin{itemize}
+	\item Task: Applying the Episodic Natural Actor-Critic to a Sarcos Master Arm to hit a baseball.
+	\item Figure(a) shows the average of the reward. The robot fail to reproduce the behavior at first. Subsequently the accuracy of the hitting angle is improved to hit properly after 200-300 trials.
+\end{itemize}
+\begin{center}
+	\includegraphics[width=0.9\textwidth]{img/performance1.png}
+	\vspace*{-13mm}
+\end{center}
+\begin{itemize}
+	\item Conclusion: The example of motor primitive learning for baseball underlines the efficiency of natural gradient methods for complex movement systems.
+\end{itemize}
+
 
 \end{pcolumn}
 }
