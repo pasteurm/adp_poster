@@ -307,6 +307,8 @@ with $\alpha_n = [\varepsilon(\nabla J(\theta)^TF_\theta^{-1}\nabla J(\theta))^{
 \vspace*{2mm}
 }
 \subsection{Episodic Natural Actor-Critic Algorithm}
+\vspace*{-17mm}
+
 \end{pcolumn}
 %
 \hfill
@@ -319,7 +321,11 @@ with $\alpha_n = [\varepsilon(\nabla J(\theta)^TF_\theta^{-1}\nabla J(\theta))^{
 %
 {\large
 \begin{itemize}
-	\item For episodic tasks the natural actor-critic can be simpified as:
+	\item The Bellman equation can be witten in terms of 	the advantage function and the state-value function:
+\begin{equation}
+	Q^\pi (x, u) = A^\pi(x, u) + V^\pi(x) = r(x,u) + \gamma \int_x p(x^{'}|x,u)V^\pi(x^{'})dx^{'}
+\end{equation}
+	\item Inserting $A^\pi(x,u)$ as the compatible value approximation term $\nabla_\theta log \pi(u_t|x_t)^T\omega$ and $V^\pi(x)$ an appropriate basis function representation $\phi(x)^Tv$. Then for episodic tasks we can derive:
 \begin{equation}
 	\sum_{t=0}^H a_t \nabla log \pi(u_t, x_t)^Tw + J_0 = \sum_{t=0}^H a_t r(x_t, u_t)
 \end{equation}
@@ -367,7 +373,7 @@ with $Q^{-1} = m^{-1}(I_n + \overline\Phi^T(mF_2-\overline\Phi\overline\Phi^T)^{
 	\item The complete solution can be transformed into the form below:
 \end{itemize}
 \begin{center}
-	\includegraphics[width=0.9\textwidth]{img/algorithm.png}
+	\includegraphics[width=0.8\textwidth]{img/algorithm.png}
 	\vspace*{-13mm}
 \end{center}
 \vspace*{-2mm}
