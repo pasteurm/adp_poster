@@ -132,9 +132,10 @@ Proof (Sketch).}\,\,}{\hfill\linebreak[0]\hspace*{\fill}}
 
 	\item Typical characteristics:
 	\begin{itemize}
-		\item  high-dimensional and continuous space and action space
+		\item state and action spaces are high-dimensional and continuous spaces
 		\item has to be model-free
-		\item high degrees of freedom cannot deal with parameterised policies
+		% I think we should remove following, the paper is saying that most RL methods are not fit for that, but it is not really a characteristic of the problem
+		% \item high degrees of freedom cannot deal with parameterised policies
 	\end{itemize}
 \end{itemize}
 }
@@ -196,7 +197,7 @@ where $\alpha_m \in R^+$ denotes a learning rate.
 	J(\theta) = \int p_\theta(\tau) r(\tau) d\tau
 \end{equation}
 
- 	\item Subsequently, the gradient can be rewritted by:
+ 	\item Subsequently, the gradient can be rewritten by:
 \begin{equation}
 	\nabla_\theta J(\theta) = \int \nabla_\theta p_\theta(\tau) r(\tau) d\tau \nonumber \\
 	= \int p_\theta(\tau) \nabla_\theta log p_\theta (\tau) r(\tau) d(\tau) \nonumber \\
@@ -208,7 +209,7 @@ where $\alpha_m \in R^+$ denotes a learning rate.
 \begin{equation}
 	\nabla_\theta log p_\theta (\tau) = \sum_{k=0}^H \nabla_\theta log \pi_\theta (u_k | x_k)
 \end{equation}
-	\item A constant baseline can be inserted since it has no effect to the derivative. Usually $b$ is chosen with the goal to minimize the variance of the gradient estimator. and results in the final form of the gradient estimator:
+	\item A constant baseline can be inserted since it has no effect on the derivative. Usually $b$ is chosen with the goal to minimize the variance of the gradient estimator, and results in the following form of the gradient estimator:
 % \begin{equation}
 % 	\nabla_\theta J(\theta) = E\{\nabla_\theta log p_\theta(\tau) (r(\tau) - b)\}
 % \end{equation}
